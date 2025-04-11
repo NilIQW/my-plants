@@ -90,127 +90,6 @@
           }
         }
       }
-    },
-    "/JoinLobby": {
-      "post": {
-        "tags": [
-          "VerySimplyKahootWithInMemoryDb"
-        ],
-        "operationId": "VerySimplyKahootWithInMemoryDb_JoinLobby",
-        "parameters": [
-          {
-            "name": "clientId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/StartGame": {
-      "post": {
-        "tags": [
-          "VerySimplyKahootWithInMemoryDb"
-        ],
-        "operationId": "VerySimplyKahootWithInMemoryDb_StartGame",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/PlayThroughRounds": {
-      "post": {
-        "tags": [
-          "VerySimplyKahootWithInMemoryDb"
-        ],
-        "operationId": "VerySimplyKahootWithInMemoryDb_PlayThroughRounds",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/SubmitAnswer": {
-      "post": {
-        "tags": [
-          "VerySimplyKahootWithInMemoryDb"
-        ],
-        "operationId": "VerySimplyKahootWithInMemoryDb_SubmitAnswer",
-        "parameters": [
-          {
-            "name": "player",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "answer",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 2
-          },
-          {
-            "name": "questionId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 3
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -277,38 +156,6 @@
           }
         }
       },
-      "ExampleClientDto": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "somethingTheClientSends": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "ExampleServerResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "somethingTheServerSends": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
       "Ping": {
         "allOf": [
           {
@@ -352,8 +199,6 @@
         "description": "Available eventType constants",
         "enum": [
           "MemberLeftNotification",
-          "ExampleClientDto",
-          "ExampleServerResponse",
           "Ping",
           "Pong",
           "ServerSendsErrorMessage"
