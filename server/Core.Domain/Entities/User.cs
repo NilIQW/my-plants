@@ -14,5 +14,8 @@ public partial class User
     public string Salt { get; set; } = null!;
 
     public string Role { get; set; } = null!;
+    
+    public ICollection<UserPlant> UserPlants { get; set; } = new List<UserPlant>();
+
 
 }
