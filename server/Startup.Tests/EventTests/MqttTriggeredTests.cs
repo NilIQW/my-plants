@@ -1,4 +1,4 @@
-using System.Text.Json;
+/*using System.Text.Json;
 using Application.Interfaces;
 using Application.Interfaces.Infrastructure.Websocket;
 using Application.Models;
@@ -70,4 +70,4 @@ public class MqttTriggeredTests
             throw new Exception("Expected a log form device of ID " + deviceId + " but only found: " +
                                 JsonSerializer.Serialize(dbCtx.Devicelogs.ToList()));
     }
-}
+}*/

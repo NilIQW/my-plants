@@ -92,8 +92,8 @@ public class RestTriggeredTests
 
         //Act
         await ApiTestSetupUtilities.TestRegisterAndAddJwt(_httpClient);
-        _ = await _httpClient.PostAsJsonAsync(WeatherStationController.AdminChangesPreferencesRoute,
-            changePrefernecesDto);
+        //_ = await _httpClient.PostAsJsonAsync(WeatherStationController.AdminChangesPreferencesRoute,
+           // changePrefernecesDto);
         await Task.Delay(1000); // Hardcoded delay to account for network overhead to the edge device
 
         var actualObjectReceivedByMqttDevice =

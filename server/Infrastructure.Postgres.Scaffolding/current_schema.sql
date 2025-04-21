@@ -7,16 +7,6 @@ BEGIN
 END $EF$;
 
 
-CREATE TABLE "Devicelogs" (
-    "Id" text NOT NULL,
-    "Deviceid" text NOT NULL,
-    "Value" numeric NOT NULL,
-    "Unit" text NOT NULL,
-    "Timestamp" timestamp with time zone NOT NULL,
-    CONSTRAINT "PK_Devicelogs" PRIMARY KEY ("Id")
-);
-
-
 CREATE TABLE plants.plant (
     id uuid NOT NULL,
     plant_name text NOT NULL,

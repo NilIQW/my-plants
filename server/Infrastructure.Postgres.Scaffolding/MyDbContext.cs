@@ -13,7 +13,6 @@ public partial class MyDbContext : DbContext
     }
 
     public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<Devicelog> Devicelogs { get; set; }
     public virtual DbSet<Plant> Plants { get; set; }
     public virtual DbSet<UserPlant> UserPlants { get; set; }
     public virtual DbSet<WateringLog> WateringLogs { get; set; }

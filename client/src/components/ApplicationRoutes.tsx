@@ -1,7 +1,7 @@
 import {Route, Routes, useNavigate} from "react-router";
 import AdminDashboard from "./Dashboard.tsx";
 import useInitializeData from "../hooks/useInitializeData.tsx";
-import {DashboardRoute, RegisterRoute, SettingsRoute, SignInRoute} from '../routeConstants.ts';
+import {DashboardRoute, PlantSearchRoute, RegisterRoute, SettingsRoute, SignInRoute} from '../routeConstants.ts';
 import useSubscribeToTopics from "../hooks/useSubscribeToTopics.tsx";
 import Settings from "./Settings.tsx";
 import Dock from "./Dock.tsx";
@@ -12,6 +12,7 @@ import {JwtAtom} from "../atoms.ts";
 import toast from "react-hot-toast";
 import WebsocketConnectionIndicator from "./WebsocketConnectionIndicator.tsx";
 import Register from "./Register.tsx";
+import PlantSearch from "./PlantSearch.tsx";
 
 export default function ApplicationRoutes() {
     
@@ -33,6 +34,7 @@ export default function ApplicationRoutes() {
         <Routes>
             <Route element={<SignIn/>} path={SignInRoute}/>
             <Route element={<Register/>} path={RegisterRoute}/>
+            <Route element={<PlantSearch/>} path={PlantSearchRoute}/>
         </Routes>
     </>)
 }
