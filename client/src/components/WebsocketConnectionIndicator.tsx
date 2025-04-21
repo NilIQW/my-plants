@@ -10,7 +10,7 @@ export default function WebsocketConnectionIndicator(){
          <span className="absolute top-0 right-0 m-10">
         <div className="indicator">
             <span className={'indicator-item badge '+badgeColor }></span>
-            <button className="btn">Websocket connection status</button>
+            <button className="btn">Connection status</button>
         </div>
      </span>
     </>)

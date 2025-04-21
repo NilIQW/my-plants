@@ -1,7 +1,7 @@
 import {Route, Routes, useNavigate} from "react-router";
 import AdminDashboard from "./Dashboard.tsx";
 import useInitializeData from "../hooks/useInitializeData.tsx";
-import {DashboardRoute, SettingsRoute, SignInRoute} from '../routeConstants.ts';
+import {DashboardRoute, RegisterRoute, SettingsRoute, SignInRoute} from '../routeConstants.ts';
 import useSubscribeToTopics from "../hooks/useSubscribeToTopics.tsx";
 import Settings from "./Settings.tsx";
 import Dock from "./Dock.tsx";
@@ -11,6 +11,7 @@ import {useAtom} from "jotai";
 import {JwtAtom} from "../atoms.ts";
 import toast from "react-hot-toast";
 import WebsocketConnectionIndicator from "./WebsocketConnectionIndicator.tsx";
+import Register from "./Register.tsx";
 
 export default function ApplicationRoutes() {
     
@@ -30,13 +31,8 @@ export default function ApplicationRoutes() {
         {/*the browser router is defined in main tsx so that i can use useNavigate anywhere*/}
         <WebsocketConnectionIndicator />
         <Routes>
-    
-            <Route element={<AdminDashboard/>} path={DashboardRoute}/>
-            <Route element={<Settings/>} path={SettingsRoute}/>
             <Route element={<SignIn/>} path={SignInRoute}/>
-
+            <Route element={<Register/>} path={RegisterRoute}/>
         </Routes>
-        <Dock/>
-
     </>)
 }
