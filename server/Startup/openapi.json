@@ -91,18 +91,146 @@
         }
       }
     },
-    "/api/Plants/search": {
+    "/api/Plants": {
       "get": {
         "tags": [
           "Plants"
         ],
-        "operationId": "Plants_Search",
+        "operationId": "Plants_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Plants"
+        ],
+        "operationId": "Plants_Create",
+        "requestBody": {
+          "x-name": "dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePlantDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Plants/{id}": {
+      "get": {
+        "tags": [
+          "Plants"
+        ],
+        "operationId": "Plants_GetById",
         "parameters": [
           {
-            "name": "q",
-            "in": "query",
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Plants"
+        ],
+        "operationId": "Plants_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlantDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Plants"
+        ],
+        "operationId": "Plants_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
             },
             "x-position": 1
           }
@@ -272,6 +400,53 @@
           "password": {
             "type": "string",
             "minLength": 4
+          }
+        }
+      },
+      "CreatePlantDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "plantName": {
+            "type": "string"
+          },
+          "plantType": {
+            "type": "string"
+          },
+          "moistureThreshold": {
+            "type": "number",
+            "format": "float"
+          },
+          "isAutoWateringEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UpdatePlantDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "plantName": {
+            "type": "string",
+            "nullable": true
+          },
+          "plantType": {
+            "type": "string",
+            "nullable": true
+          },
+          "moistureLevel": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "moistureThreshold": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "isAutoWateringEnabled": {
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
