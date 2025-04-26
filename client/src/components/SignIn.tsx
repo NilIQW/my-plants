@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authClient } from "../apiControllerClients";
 import toast from "react-hot-toast";
-import {PlantSearchRoute, RegisterRoute} from "../routeConstants.ts";
+import {HomePageRoute, PlantSearchRoute, RegisterRoute} from "../routeConstants.ts";
 
 export default function SignIn() {
     const [jwt, setJwt] = useAtom(JwtAtom);
@@ -14,7 +14,7 @@ export default function SignIn() {
 
     useEffect(() => {
         if (jwt && jwt.length > 0) {
-            navigate(PlantSearchRoute); // Redirect to home if already signed in
+            navigate(HomePageRoute); // Redirect to home if already signed in
         }
     }, [jwt, navigate]);
 
