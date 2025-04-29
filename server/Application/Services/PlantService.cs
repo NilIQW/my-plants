@@ -32,7 +32,8 @@ public class PlantService : IPlantService
                 PlantName = dto.PlantName,
                 PlantType = dto.PlantType,
                 MoistureThreshold = dto.MoistureThreshold,
-                IsAutoWateringEnabled = dto.IsAutoWateringEnabled
+                MoistureLevel = dto.MoistureLevel,
+                IsAutoWateringEnabled = dto.IsAutoWateringEnabled,
             };
 
             await _repository.AddAsync(plant);

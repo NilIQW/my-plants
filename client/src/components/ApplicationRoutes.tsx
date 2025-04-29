@@ -2,6 +2,7 @@ import {Route, Routes, useNavigate} from "react-router";
 import AdminDashboard from "./Dashboard.tsx";
 import useInitializeData from "../hooks/useInitializeData.tsx";
 import {
+    CreatePlantRoute,
     DashboardRoute,
     HomePageRoute,
     PlantSearchRoute,
@@ -21,6 +22,8 @@ import WebsocketConnectionIndicator from "./WebsocketConnectionIndicator.tsx";
 import Register from "./Register.tsx";
 import PlantSearch from "./PlantSearch.tsx";
 import HomePage from "./HomePage.tsx";
+import Logout from "./LogOut.tsx";
+import CreatePlant from "./CreatePlant.tsx";
 
 export default function ApplicationRoutes() {
     
@@ -38,11 +41,11 @@ export default function ApplicationRoutes() {
     
     return (<>
         {/*the browser router is defined in main tsx so that i can use useNavigate anywhere*/}
-        <WebsocketConnectionIndicator />
         <Routes>
             <Route element={<SignIn/>} path={SignInRoute}/>
             <Route element={<Register/>} path={RegisterRoute}/>
             <Route element={<HomePage/>} path={HomePageRoute}/>
+            <Route element={<CreatePlant/>} path={CreatePlantRoute}/>
         </Routes>
     </>)
 }

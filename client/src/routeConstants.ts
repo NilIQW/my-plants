@@ -4,3 +4,4 @@ export const SignInRoute = '/signin';
 export const RegisterRoute = '/register';
 export const PlantSearchRoute = '/plants/search'
 export const HomePageRoute = '/home'
+export const CreatePlantRoute = '/createPlant'

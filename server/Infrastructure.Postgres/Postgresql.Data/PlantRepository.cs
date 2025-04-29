@@ -14,15 +14,33 @@ public class PlantRepository : IPlantRepository
         _db = db;
     }
 
-    public async Task<List<Plant>> GetAllAsync() => await _db.Plants.ToListAsync();
+    public async Task<List<Plant>> GetAllAsync()
+    {
+        return await _db.Plants.ToListAsync();
+    }
 
-    public async Task<Plant?> GetByIdAsync(Guid id) => await _db.Plants.FindAsync(id);
+    public async Task<Plant?> GetByIdAsync(Guid id)
+    {
+        return await _db.Plants.FindAsync(id);
+    }
 
-    public async Task AddAsync(Plant plant) => await _db.Plants.AddAsync(plant);
+    public async Task AddAsync(Plant plant)
+    {
+        await _db.Plants.AddAsync(plant);
+    }
 
-    public void Update(Plant plant) => _db.Plants.Update(plant);
+    public void Update(Plant plant)
+    {
+        _db.Plants.Update(plant);
+    }
 
-    public void Delete(Plant plant) => _db.Plants.Remove(plant);
+    public void Delete(Plant plant)
+    {
+        _db.Plants.Remove(plant);
+    }
 
-    public async Task SaveChangesAsync() => await _db.SaveChangesAsync();
+    public async Task SaveChangesAsync()
+    {
+        await _db.SaveChangesAsync();
+    }
 }

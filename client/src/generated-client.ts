@@ -142,14 +142,14 @@ export class PlantsClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    getAll(): Promise<FileResponse> {
+    getAll(): Promise<PlantResponseDto[]> {
         let url_ = this.baseUrl + "/api/Plants";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/octet-stream"
+                "Accept": "application/json"
             }
         };
 
@@ -158,26 +158,21 @@ export class PlantsClient {
         });
     }
 
-    protected processGetAll(response: Response): Promise<FileResponse> {
+    protected processGetAll(response: Response): Promise<PlantResponseDto[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as PlantResponseDto[];
+            return result200;
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<PlantResponseDto[]>(null as any);
     }
 
     create(dto: CreatePlantDto): Promise<FileResponse> {
@@ -222,7 +217,7 @@ export class PlantsClient {
         return Promise.resolve<FileResponse>(null as any);
     }
 
-    getById(id: string): Promise<FileResponse> {
+    getById(id: string): Promise<PlantResponseDto> {
         let url_ = this.baseUrl + "/api/Plants/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -232,7 +227,7 @@ export class PlantsClient {
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/octet-stream"
+                "Accept": "application/json"
             }
         };
 
@@ -241,26 +236,21 @@ export class PlantsClient {
         });
     }
 
-    protected processGetById(response: Response): Promise<FileResponse> {
+    protected processGetById(response: Response): Promise<PlantResponseDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as PlantResponseDto;
+            return result200;
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<PlantResponseDto>(null as any);
     }
 
     update(id: string, dto: UpdatePlantDto): Promise<FileResponse> {
@@ -498,10 +488,20 @@ export interface AuthRequestDto {
     password: string;
 }
 
+export interface PlantResponseDto {
+    id: string;
+    plantName: string;
+    plantType: string;
+    moistureLevel: number;
+    moistureThreshold: number;
+    isAutoWateringEnabled: boolean;
+}
+
 export interface CreatePlantDto {
     plantName?: string;
     plantType?: string;
     moistureThreshold?: number;
+    moistureLevel?: number;
     isAutoWateringEnabled?: boolean;
 }
 
@@ -545,12 +545,6 @@ export interface ExampleServerResponse extends BaseDto {
     somethingTheServerSends?: string;
 }
 
-export interface Ping extends BaseDto {
-}
-
-export interface Pong extends BaseDto {
-}
-
 export interface ServerSendsErrorMessage extends BaseDto {
     message?: string;
 }
@@ -561,8 +555,6 @@ export enum StringConstants {
     MemberLeftNotification = "MemberLeftNotification",
     ExampleClientDto = "ExampleClientDto",
     ExampleServerResponse = "ExampleServerResponse",
-    Ping = "Ping",
-    Pong = "Pong",
     ServerSendsErrorMessage = "ServerSendsErrorMessage",
     Dashboard = "Dashboard",
     Device = "Device",

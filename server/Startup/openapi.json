@@ -101,10 +101,12 @@
           "200": {
             "description": "",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlantResponseDto"
+                  }
                 }
               }
             }
@@ -165,10 +167,9 @@
           "200": {
             "description": "",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "$ref": "#/components/schemas/PlantResponseDto"
                 }
               }
             }
@@ -403,6 +404,44 @@
           }
         }
       },
+      "PlantResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "plantName",
+          "plantType",
+          "moistureLevel",
+          "moistureThreshold",
+          "isAutoWateringEnabled"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid",
+            "minLength": 1
+          },
+          "plantName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "plantType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "moistureLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "moistureThreshold": {
+            "type": "number",
+            "format": "float"
+          },
+          "isAutoWateringEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
       "CreatePlantDto": {
         "type": "object",
         "additionalProperties": false,
@@ -414,6 +453,10 @@
             "type": "string"
           },
           "moistureThreshold": {
+            "type": "number",
+            "format": "float"
+          },
+          "moistureLevel": {
             "type": "number",
             "format": "float"
           },
@@ -566,28 +609,6 @@
           }
         ]
       },
-      "Ping": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "Pong": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
       "ServerSendsErrorMessage": {
         "allOf": [
           {
@@ -612,8 +633,6 @@
           "MemberLeftNotification",
           "ExampleClientDto",
           "ExampleServerResponse",
-          "Ping",
-          "Pong",
           "ServerSendsErrorMessage",
           "Dashboard",
           "Device",

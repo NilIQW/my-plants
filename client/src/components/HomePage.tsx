@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { plantsClient } from "../apiControllerClients.ts";
-
-interface PlantDto {
-    id: string;
-    plantName: string;
-    plantType: string;
-    moistureLevel: number;
-    moistureThreshold: number;
-    isAutoWateringEnabled: boolean;
-}
+import Logout from "./LogOut.tsx";
+import { PlantResponseDto } from "../generated-client.ts";
+import "../CSS/HomePage.css";
+import {useNavigate} from "react-router-dom";
+import {CreatePlantRoute} from "../routeConstants.ts";
 
 const HomePage: React.FC = () => {
-    const [plants, setPlants] = useState<PlantDto[]>([]);
-    const [selectedPlant, setSelectedPlant] = useState<PlantDto | null>(null);
+    const [plants, setPlants] = useState<PlantResponseDto[]>([]);
+    const [selectedPlant, setSelectedPlant] = useState<PlantResponseDto | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [editData, setEditData] = useState<Partial<PlantDto>>({});
+    const [editData, setEditData] = useState<Partial<PlantResponseDto>>({});
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         fetchPlants();
@@ -22,11 +20,8 @@ const HomePage: React.FC = () => {
 
     async function fetchPlants() {
         try {
-            const fileResponse = await plantsClient.getAll();
-            const blob = fileResponse.data;
-            const text = await blob.text();
-            const data = JSON.parse(text) as PlantDto[];
-            setPlants(data);
+            const plantsData = await plantsClient.getAll();
+            setPlants(plantsData);
         } catch (error) {
             console.error("Failed to fetch plants:", error);
         }
@@ -53,6 +48,10 @@ const HomePage: React.FC = () => {
             [name]: type === "checkbox" ? checked : value
         }));
     };
+
+    const handleNavigate = async () => {
+        navigate(CreatePlantRoute)
+    }
 
     const handleDeleteClick = async () => {
         if (selectedPlant) {
@@ -81,8 +80,7 @@ const HomePage: React.FC = () => {
                     isAutoWateringEnabled: editData.isAutoWateringEnabled!,
                 });
 
-                // Optimistically update local plants list
-                const updatedPlant: PlantDto = {
+                const updatedPlant: PlantResponseDto = {
                     ...selectedPlant,
                     plantName: editData.plantName!,
                     plantType: editData.plantType!,
@@ -102,81 +100,83 @@ const HomePage: React.FC = () => {
     };
 
     return (
-        <div style={{ padding: "2rem" }}>
-            <h1>Choose a Plant</h1>
-            <select onChange={handleSelectChange} value={selectedPlant?.id || ""}>
-                <option value="">-- Select a plant --</option>
-                {plants.map((plant) => (
-                    <option key={plant.id} value={plant.id}>
-                        {plant.plantName}
-                    </option>
-                ))}
-            </select>
+        <>
+            <Logout />
+            <div className="container">
+                <h1>Choose a Plant</h1>
+                <select className="select" onChange={handleSelectChange} value={selectedPlant?.id || ""}>
+                    <option value="">-- Select a plant --</option>
+                    {plants.map((plant) => (
+                        <option key={plant.id} value={plant.id}>
+                            {plant.plantName}
+                        </option>
+                    ))}
+                </select>
 
-            {selectedPlant && (
-                <div style={{ marginTop: "2rem", border: "1px solid #ccc", padding: "1rem" }}>
-                    <h2>Plant Details</h2>
-                    {isEditing ? (
-                        <div>
+                {selectedPlant && (
+                    <div className="plant-details">
+                        <h2>Plant Details</h2>
+                        {isEditing ? (
+                            <div className="form">
+                                <div>
+                                    <label>Name: </label>
+                                    <input
+                                        type="text"
+                                        name="plantName"
+                                        value={editData.plantName || ""}
+                                        onChange={handleInputChange}
+                                        className="input"
+                                    />
+                                </div>
+                                <div>
+                                    <label>Type: </label>
+                                    <input
+                                        type="text"
+                                        name="plantType"
+                                        value={editData.plantType || ""}
+                                        onChange={handleInputChange}
+                                        className="input"
+                                    />
+                                </div>
+                                <div>
+                                    <label>Moisture Threshold: </label>
+                                    <input
+                                        type="number"
+                                        name="moistureThreshold"
+                                        value={editData.moistureThreshold || 0}
+                                        onChange={handleInputChange}
+                                        className="input"
+                                    />
+                                </div>
+                                <div>
+                                    <label>Auto Watering Enabled: </label>
+                                    <input
+                                        type="checkbox"
+                                        name="isAutoWateringEnabled"
+                                        checked={editData.isAutoWateringEnabled || false}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <button className="save-button" onClick={handleSaveClick}>Save</button>
+                            </div>
+                        ) : (
                             <div>
-                                <label>Name: </label>
-                                <input
-                                    type="text"
-                                    name="plantName"
-                                    value={editData.plantName || ""}
-                                    onChange={handleInputChange}
-                                />
+                                <p><strong>Name:</strong> {selectedPlant.plantName}</p>
+                                <p><strong>Type:</strong> {selectedPlant.plantType}</p>
+                                <p><strong>Moisture Level:</strong> {selectedPlant.moistureLevel}</p>
+                                <p><strong>Moisture Threshold:</strong> {selectedPlant.moistureThreshold}</p>
+                                <p><strong>Auto Watering Enabled:</strong> {selectedPlant.isAutoWateringEnabled ? "Yes" : "No"}</p>
+                                <div className="button-group">
+                                    <button className="edit-button" onClick={handleEditClick}>Edit</button>
+                                    <button className="delete-button" onClick={handleDeleteClick}>Delete</button>
+                                </div>
                             </div>
-                            <div>
-                                <label>Type: </label>
-                                <input
-                                    type="text"
-                                    name="plantType"
-                                    value={editData.plantType || ""}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label>Moisture Threshold: </label>
-                                <input
-                                    type="number"
-                                    name="moistureThreshold"
-                                    value={editData.moistureThreshold || 0}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label>Auto Watering Enabled: </label>
-                                <input
-                                    type="checkbox"
-                                    name="isAutoWateringEnabled"
-                                    checked={editData.isAutoWateringEnabled || false}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <button onClick={handleSaveClick}>Save</button>
-                        </div>
-                    ) : (
-                        <div>
-                            <p><strong>Name:</strong> {selectedPlant.plantName}</p>
-                            <p><strong>Type:</strong> {selectedPlant.plantType}</p>
-                            <p><strong>Moisture Level:</strong> {selectedPlant.moistureLevel}</p>
-                            <p><strong>Moisture Threshold:</strong> {selectedPlant.moistureThreshold}</p>
-                            <p><strong>Auto Watering
-                                Enabled:</strong> {selectedPlant.isAutoWateringEnabled ? "Yes" : "No"}</p>
-                            <div style={{marginTop: "1rem"}}>
-                                <button onClick={handleEditClick}>Edit</button>
-                                {" "}
-                                <button onClick={handleDeleteClick} style={{color: "red"}}>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            )}
-            <button>Create Plant</button>
-        </div>
+                        )}
+                    </div>
+                )}
+                <button onClick={handleNavigate} className="create-button">Create Plant</button>
+            </div>
+        </>
     );
 };
 

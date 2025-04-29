@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authClient } from "../apiControllerClients";
 import toast from "react-hot-toast";
-import {HomePageRoute, PlantSearchRoute, RegisterRoute} from "../routeConstants.ts";
+import {HomePageRoute,  RegisterRoute} from "../routeConstants.ts";
 
 export default function SignIn() {
     const [jwt, setJwt] = useAtom(JwtAtom);
@@ -14,7 +14,7 @@ export default function SignIn() {
 
     useEffect(() => {
         if (jwt && jwt.length > 0) {
-            navigate(HomePageRoute); // Redirect to home if already signed in
+            navigate(HomePageRoute);
         }
     }, [jwt, navigate]);
 
@@ -24,7 +24,7 @@ export default function SignIn() {
             toast.success("Logged in successfully!");
             localStorage.setItem("jwt", response.jwt);
             setJwt(response.jwt);
-            navigate("/"); // Redirect after login
+            navigate(HomePageRoute);
         } catch (error) {
             toast.error("Login failed");
             console.error(error);
