@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Application.Interfaces.Infrastructure.MQTT;
 using Application.Interfaces.Infrastructure.Postgres;
 using Application.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ public static class Extensions
     {
         services.AddScoped<ISecurityService, SecurityService>();
         services.AddScoped<IPlantService, PlantService>();
+        services.AddScoped<IWateringService, WateringService>();
         services.AddScoped<IWebsocketSubscriptionService, WebsocketSubscriptionService>();
         return services;
     }
