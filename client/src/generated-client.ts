@@ -549,6 +549,14 @@ export interface ServerSendsErrorMessage extends BaseDto {
     message?: string;
 }
 
+export interface WaterNowClientDto extends BaseDto {
+    plantId?: string;
+}
+
+export interface WaterNowServerResponse extends BaseDto {
+    message?: string;
+}
+
 /** Available eventType and string constants */
 export enum StringConstants {
     ServerBroadcastsLiveDataToDashboard = "ServerBroadcastsLiveDataToDashboard",
@@ -556,6 +564,8 @@ export enum StringConstants {
     ExampleClientDto = "ExampleClientDto",
     ExampleServerResponse = "ExampleServerResponse",
     ServerSendsErrorMessage = "ServerSendsErrorMessage",
+    WaterNowClientDto = "WaterNowClientDto",
+    WaterNowServerResponse = "WaterNowServerResponse",
     Dashboard = "Dashboard",
     Device = "Device",
     ChangePreferences = "ChangePreferences",

@@ -37,6 +37,7 @@ const CreatePlant: React.FC = () => {
             };
 
             // Call the API to create the plant
+            // @ts-ignore
             const response: PlantResponseDto = await plantsClient.create(plantData);
 
             console.log("Plant created successfully:", response);
@@ -98,8 +99,6 @@ const CreatePlant: React.FC = () => {
                 <div>
                     <label htmlFor="isAutoWateringEnabled">Enable Auto Watering:</label>
                     <input
-                        id="isAutoWateringEnabled"
-                        className="input"
                         type="checkbox"
                         name="isAutoWateringEnabled"
                         checked={newPlantData.isAutoWateringEnabled || false}

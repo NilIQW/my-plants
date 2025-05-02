@@ -70,7 +70,7 @@ namespace Api.Rest.Controllers
                 IsAutoWateringEnabled = created.IsAutoWateringEnabled
             };
 
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
+            return Ok(response);
         }
 
         [HttpPut("{id:guid}")]

@@ -8,6 +8,7 @@
 
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="Fleck" Version="1.2.0" />
         <PackageReference Include="HiveMQtt" Version="0.26.0"/>
         <ProjectReference Include="../Application/Application.csproj"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1"/>
