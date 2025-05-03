@@ -101,7 +101,6 @@ const HomePage: React.FC = () => {
 
     return (
         <>
-            <Logout />
             <div className="container">
                 <h1>Choose a Plant</h1>
                 <select className="select" onChange={handleSelectChange} value={selectedPlant?.id || ""}>
@@ -169,6 +168,7 @@ const HomePage: React.FC = () => {
                                 <div className="button-group">
                                     <button className="edit-button" onClick={handleEditClick}>Edit</button>
                                     <button className="delete-button" onClick={handleDeleteClick}>Delete</button>
+                                    <button className="watering-button">Watering Logs</button>
                                 </div>
                             </div>
                         )}

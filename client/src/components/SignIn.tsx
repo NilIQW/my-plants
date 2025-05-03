@@ -32,28 +32,31 @@ export default function SignIn() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen space-y-4">
-            <h1 className="text-xl">Sign In</h1>
-            <input
-                type="email"
-                className="input input-bordered"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                className="input input-bordered"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button className="btn btn-primary" onClick={handleLogin}>
-                Sign In
-            </button>
-            <button className="btn btn-link" onClick={() => navigate(RegisterRoute)}>
-                Register
-            </button>
+        <div className="flex items-center justify-center h-screen">
+            <div className="w-full max-w-xs flex flex-col space-y-4">
+                <h1 className="text-xl text-center">Sign In</h1>
+                <input
+                    type="email"
+                    className="input input-bordered w-full"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    className="input input-bordered w-full"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button className="btn btn-primary w-full" onClick={handleLogin}>
+                    Sign In
+                </button>
+                <button className="btn btn-link w-full" onClick={() => navigate(RegisterRoute)}>
+                    Register
+                </button>
+            </div>
         </div>
+
     );
 }

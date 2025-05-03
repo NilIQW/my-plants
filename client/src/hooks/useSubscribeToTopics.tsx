@@ -20,7 +20,7 @@ export default function useSubscribeToTopics() {
             topicIds: [StringConstants.Dashboard, "PlantMoisture"],
         };
         subscriptionClient.subscribe(jwt, subscribeDto).then(r => {
-            toast("You are subscribed to the dashboard topic");
+            toast("You are subscribed to the PlantMoisture topic");
         })
 
     }, [readyState, jwt])

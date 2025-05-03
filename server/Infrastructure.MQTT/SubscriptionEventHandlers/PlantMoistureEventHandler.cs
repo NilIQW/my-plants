@@ -124,7 +124,7 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
 
     public class PlantMoistureData
     {
-        public Guid PlantId { get; set; }
+        public string PlantId { get; set; }
         public int Moisture { get; set; }
     }
 }

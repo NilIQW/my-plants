@@ -54,7 +54,6 @@ public partial class MyDbContext : DbContext
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.PlantId).HasColumnName("plant_id");
-            entity.Property(e => e.LastWatered).HasColumnName("last_watered");
             entity.Property(e => e.IsOwner).HasColumnName("is_owner");
 
             entity.HasOne(up => up.User)

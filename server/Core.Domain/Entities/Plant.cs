@@ -2,7 +2,7 @@ namespace Core.Domain.Entities;
 
 public class Plant
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string PlantName { get; set; } = null!;
     public string PlantType { get; set; } = null!;
     public float MoistureLevel { get; set; } 

@@ -5,8 +5,8 @@ namespace Application.Interfaces.Infrastructure.Postgres;
 public interface IPlantService
 {
     Task<List<PlantDto>> GetAllAsync();
-    Task<PlantDto?> GetByIdAsync(Guid id);
+    Task<PlantDto?> GetByIdAsync(string id);
     Task<PlantDto> CreateAsync(CreatePlantDto dto);
-    Task<PlantDto?> UpdateAsync(Guid id, UpdatePlantDto dto);
-    Task<bool> DeleteAsync(Guid id);
+    Task<PlantDto?> UpdateAsync(string id, UpdatePlantDto dto);
+    Task<bool> DeleteAsync(string id);
 }

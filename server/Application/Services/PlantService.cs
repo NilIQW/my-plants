@@ -19,7 +19,7 @@ public class PlantService : IPlantService
             return plants.Select(MapToDto).ToList();
         }
 
-        public async Task<PlantDto?> GetByIdAsync(Guid id)
+        public async Task<PlantDto?> GetByIdAsync(string id)
         {
             var plant = await _repository.GetByIdAsync(id);
             return plant == null ? null : MapToDto(plant);
@@ -37,12 +37,21 @@ public class PlantService : IPlantService
             };
 
             await _repository.AddAsync(plant);
+            
+            var userPlant = new UserPlant
+            {
+                Plant = plant,
+                UserId = dto.UserId,
+                IsOwner = true
+            };
+
+            await _repository.AddUserPlantAsync(userPlant);
             await _repository.SaveChangesAsync();
 
             return MapToDto(plant);
         }
 
-        public async Task<PlantDto?> UpdateAsync(Guid id, UpdatePlantDto dto)
+        public async Task<PlantDto?> UpdateAsync(string id, UpdatePlantDto dto)
         {
             var plant = await _repository.GetByIdAsync(id);
             if (plant == null) return null;
@@ -69,7 +78,7 @@ public class PlantService : IPlantService
         }
 
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(string id)
         {
             var plant = await _repository.GetByIdAsync(id);
             if (plant == null) return false;

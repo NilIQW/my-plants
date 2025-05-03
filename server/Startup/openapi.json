@@ -157,8 +157,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "guid"
+              "type": "string"
             },
             "x-position": 1
           }
@@ -187,8 +186,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "guid"
+              "type": "string"
             },
             "x-position": 1
           }
@@ -230,8 +228,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "guid"
+              "type": "string"
             },
             "x-position": 1
           }
@@ -418,7 +415,6 @@
         "properties": {
           "id": {
             "type": "string",
-            "format": "guid",
             "minLength": 1
           },
           "plantName": {
@@ -439,6 +435,10 @@
           },
           "isAutoWateringEnabled": {
             "type": "boolean"
+          },
+          "isOwner": {
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
@@ -462,6 +462,9 @@
           },
           "isAutoWateringEnabled": {
             "type": "boolean"
+          },
+          "userId": {
+            "type": "string"
           }
         }
       },
@@ -635,8 +638,7 @@
             "additionalProperties": false,
             "properties": {
               "plantId": {
-                "type": "string",
-                "format": "guid"
+                "type": "string"
               }
             }
           }

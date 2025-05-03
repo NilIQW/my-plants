@@ -8,7 +8,7 @@ END $EF$;
 
 
 CREATE TABLE plants.plant (
-    id uuid NOT NULL,
+    id text NOT NULL,
     plant_name text NOT NULL,
     plant_type text NOT NULL,
     moisture_level real NOT NULL,
@@ -30,8 +30,7 @@ CREATE TABLE plants."user" (
 
 CREATE TABLE plants.user_plant (
     user_id text NOT NULL,
-    plant_id uuid NOT NULL,
-    last_watered timestamp with time zone NOT NULL,
+    plant_id text NOT NULL,
     is_owner boolean NOT NULL,
     CONSTRAINT user_plant_pkey PRIMARY KEY (user_id, plant_id),
     CONSTRAINT "FK_user_plant_plant_plant_id" FOREIGN KEY (plant_id) REFERENCES plants.plant (id) ON DELETE CASCADE,
@@ -41,7 +40,7 @@ CREATE TABLE plants.user_plant (
 
 CREATE TABLE plants.watering_log (
     id uuid NOT NULL,
-    plant_id uuid NOT NULL,
+    plant_id text NOT NULL,
     triggered_by_user_id text,
     timestamp timestamp with time zone NOT NULL,
     method text NOT NULL,

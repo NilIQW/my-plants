@@ -19,7 +19,7 @@ public class PlantRepository : IPlantRepository
         return await _db.Plants.ToListAsync();
     }
 
-    public async Task<Plant?> GetByIdAsync(Guid id)
+    public async Task<Plant?> GetByIdAsync(string id)
     {
         return await _db.Plants.FindAsync(id);
     }
@@ -27,6 +27,11 @@ public class PlantRepository : IPlantRepository
     public async Task AddAsync(Plant plant)
     {
         await _db.Plants.AddAsync(plant);
+    }
+
+    public async Task AddUserPlantAsync(UserPlant userPlant)
+    {
+        await _db.UserPlants.AddAsync(userPlant);
     }
 
     public void Update(Plant plant)

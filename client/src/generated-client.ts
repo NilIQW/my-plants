@@ -495,6 +495,7 @@ export interface PlantResponseDto {
     moistureLevel: number;
     moistureThreshold: number;
     isAutoWateringEnabled: boolean;
+    isOwner?: boolean | undefined;
 }
 
 export interface CreatePlantDto {
@@ -503,6 +504,7 @@ export interface CreatePlantDto {
     moistureThreshold?: number;
     moistureLevel?: number;
     isAutoWateringEnabled?: boolean;
+    userId?: string;
 }
 
 export interface UpdatePlantDto {
@@ -566,10 +568,7 @@ export enum StringConstants {
     ServerSendsErrorMessage = "ServerSendsErrorMessage",
     WaterNowClientDto = "WaterNowClientDto",
     WaterNowServerResponse = "WaterNowServerResponse",
-    Dashboard = "Dashboard",
-    Device = "Device",
-    ChangePreferences = "ChangePreferences",
-    Log = "Log",
+
 }
 
 export interface FileResponse {

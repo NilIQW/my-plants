@@ -34,7 +34,7 @@ namespace Api.Rest.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<PlantResponseDto>> GetById(Guid id)
+        public async Task<ActionResult<PlantResponseDto>> GetById(string id)
         {
             var plant = await _plantService.GetByIdAsync(id);
 
@@ -67,14 +67,15 @@ namespace Api.Rest.Controllers
                 PlantName = created.PlantName,
                 PlantType = created.PlantType,
                 MoistureLevel = created.MoistureLevel, 
-                IsAutoWateringEnabled = created.IsAutoWateringEnabled
+                IsAutoWateringEnabled = created.IsAutoWateringEnabled,
+                IsOwner = true
             };
 
             return Ok(response);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, UpdatePlantDto dto)
+        public async Task<IActionResult> Update(string id, UpdatePlantDto dto)
         {
             var updated = await _plantService.UpdateAsync(id, dto);
 
@@ -88,15 +89,15 @@ namespace Api.Rest.Controllers
                 Id = updated.Id,
                 PlantName = updated.PlantName,
                 PlantType = updated.PlantType,
-                MoistureLevel = updated.MoistureLevel, // Example attribute
+                MoistureLevel = updated.MoistureLevel, 
                 IsAutoWateringEnabled = updated.IsAutoWateringEnabled
             };
 
             return Ok(response);
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
         {
             var deleted = await _plantService.DeleteAsync(id);
 

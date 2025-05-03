@@ -10,7 +10,7 @@ namespace Api.Websocket;
 
 public class WaterNowClientDto : BaseDto
 {
-    public Guid PlantId { get; set; }
+    public string PlantId { get; set; }
 }
 
 public class WaterNowServerResponse : BaseDto

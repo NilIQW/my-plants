@@ -15,13 +15,13 @@ public class WateringService : IWateringService
         _logger = logger;
     }
 
-    public async Task TriggerWateringAsync(Guid plantId)
+    public async Task TriggerWateringAsync(string plantId)
     {
         const string wateringTopic = "plants/water";
 
         var payload = new
         {
-            plantId = plantId.ToString(),
+            plantId = plantId,
             command = "ON"
         };
 

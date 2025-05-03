@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { plantsClient } from "../apiControllerClients.ts";
 import { CreatePlantDto, PlantResponseDto } from "../generated-client.ts";
 import "../CSS/HomePage.css";
+import { getUserIdFromJwt } from "../utils/jwt.ts";
 
 const CreatePlant: React.FC = () => {
-    const [newPlantData, setNewPlantData] = useState<CreatePlantDto>({
+    const [newPlantData, setNewPlantData] = useState<Omit<CreatePlantDto, "userId">>({
         plantName: "",
         plantType: "",
         moistureThreshold: 0,
@@ -13,7 +14,6 @@ const CreatePlant: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
         setNewPlantData(prev => ({
@@ -22,21 +22,23 @@ const CreatePlant: React.FC = () => {
         }));
     };
 
-    // Create plant handler
     const handleCreatePlant = async () => {
         setIsLoading(true);
         setError(null);
 
+        const userId = getUserIdFromJwt();
+        if (!userId) {
+            setError("You must be logged in to create a plant.");
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            // Use CreatePlantDto for the request body
             const plantData: CreatePlantDto = {
-                plantName: newPlantData.plantName,
-                plantType: newPlantData.plantType,
-                moistureThreshold: newPlantData.moistureThreshold,
-                isAutoWateringEnabled: newPlantData.isAutoWateringEnabled,
+                ...newPlantData,
+                userId: userId,
             };
 
-            // Call the API to create the plant
             // @ts-ignore
             const response: PlantResponseDto = await plantsClient.create(plantData);
 
