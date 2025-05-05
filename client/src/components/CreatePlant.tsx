@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { plantsClient } from "../apiControllerClients.ts";
 import { CreatePlantDto, PlantResponseDto } from "../generated-client.ts";
-import "../CSS/HomePage.css";
+import "../css/HomePage.css";
 import { getUserIdFromJwt } from "../utils/jwt.ts";
 
 const CreatePlant: React.FC = () => {

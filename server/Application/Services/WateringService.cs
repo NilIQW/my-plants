@@ -21,7 +21,7 @@ public class WateringService : IWateringService
 
         var payload = new
         {
-            plantId = plantId,
+            plantId,
             command = "ON"
         };
 

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { plantsClient } from "../apiControllerClients.ts";
 import Logout from "./LogOut.tsx";
 import { PlantResponseDto } from "../generated-client.ts";
-import "../CSS/HomePage.css";
+import "../css/HomePage.css";
 import {useNavigate} from "react-router-dom";
 import {CreatePlantRoute} from "../routeConstants.ts";
+import {WaterNowButton} from "./WaterManuallyButton.tsx";
 
 const HomePage: React.FC = () => {
     const [plants, setPlants] = useState<PlantResponseDto[]>([]);
@@ -21,6 +22,7 @@ const HomePage: React.FC = () => {
     async function fetchPlants() {
         try {
             const plantsData = await plantsClient.getAll();
+            console.log(plantsData)
             setPlants(plantsData);
         } catch (error) {
             console.error("Failed to fetch plants:", error);
@@ -168,7 +170,8 @@ const HomePage: React.FC = () => {
                                 <div className="button-group">
                                     <button className="edit-button" onClick={handleEditClick}>Edit</button>
                                     <button className="delete-button" onClick={handleDeleteClick}>Delete</button>
-                                    <button className="watering-button">Watering Logs</button>
+                                    <button className="watering-logs-button">Watering Logs</button>
+                                    <WaterNowButton plantId={selectedPlant.id}/>
                                 </div>
                             </div>
                         )}

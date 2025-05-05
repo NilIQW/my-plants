@@ -580,38 +580,6 @@
           }
         }
       },
-      "ExampleClientDto": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "somethingTheClientSends": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "ExampleServerResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "somethingTheServerSends": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
       "ServerSendsErrorMessage": {
         "allOf": [
           {
@@ -666,15 +634,10 @@
         "enum": [
           "ServerBroadcastsLiveDataToDashboard",
           "MemberLeftNotification",
-          "ExampleClientDto",
-          "ExampleServerResponse",
           "ServerSendsErrorMessage",
           "WaterNowClientDto",
           "WaterNowServerResponse",
-          "Dashboard",
-          "Device",
-          "ChangePreferences",
-          "Log"
+          "Dashboard"
         ]
       }
     }

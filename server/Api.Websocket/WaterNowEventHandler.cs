@@ -31,17 +31,28 @@ public class WaterNowEventHandler : BaseEventHandler<WaterNowClientDto>
 
     public override async Task Handle(WaterNowClientDto dto, IWebSocketConnection socket)
     {
-        _logger.LogInformation("Received WaterNow request for plant {PlantId}", dto.PlantId);
-
-        // Trigger the actual watering via MQTT
-        await _wateringService.TriggerWateringAsync(dto.PlantId);
-
-        // Respond to the client (optional)
-        socket.SendDto(new WaterNowServerResponse
+        try
         {
-            requestId = dto.requestId,
-            Message = $"Watering triggered for plant {dto.PlantId}"
-        });
+            _logger.LogInformation("Received WaterNow request for plant {PlantId}", dto.PlantId);
+
+            await _wateringService.TriggerWateringAsync(dto.PlantId);
+
+            socket.SendDto(new WaterNowServerResponse
+            {
+                requestId = dto.requestId,
+                Message = $"Watering triggered for plant"
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while processing the WaterNow request for plant {PlantId}", dto.PlantId);
+
+            socket.SendDto(new ServerSendsErrorMessage
+            {
+                requestId = dto.requestId,
+                Message = $"An error occurred: {ex.Message}"
+            });
+        }
     }
     
 }

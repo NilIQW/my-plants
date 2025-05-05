@@ -4,7 +4,7 @@ namespace Core.Domain.Entities;
 
 public class WateringLog
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public string PlantId { get; set; }
     public Plant Plant { get; set; } = null!;
@@ -13,7 +13,7 @@ public class WateringLog
     public User? TriggeredByUser { get; set; }
 
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-    public string Method { get; set; } 
+    public string Method { get; set; } //should be enum auto or manual
     public float MoistureBefore { get; set; }
     public float MoistureAfter { get; set; }
 }

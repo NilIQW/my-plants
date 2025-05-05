@@ -20,20 +20,23 @@ namespace Api.Rest.Controllers
         {
             var plants = await _plantService.GetAllAsync();
 
-            // Convert to PlantResponseDto
+            // get userPlant then IsOwner
+            
+            
             var response = plants.Select(plant => new PlantResponseDto
             {
                 Id = plant.Id,
                 PlantName = plant.PlantName,
                 PlantType = plant.PlantType,
-                MoistureLevel = plant.MoistureLevel, // Example attribute
+                MoistureLevel = plant.MoistureLevel, 
+                MoistureThreshold = plant.MoistureThreshold,
                 IsAutoWateringEnabled = plant.IsAutoWateringEnabled
             }).ToList();
 
             return Ok(response);
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<PlantResponseDto>> GetById(string id)
         {
             var plant = await _plantService.GetByIdAsync(id);
@@ -49,7 +52,8 @@ namespace Api.Rest.Controllers
                 Id = plant.Id,
                 PlantName = plant.PlantName,
                 PlantType = plant.PlantType,
-                MoistureLevel = plant.MoistureLevel, // Example attribute
+                MoistureLevel = plant.MoistureLevel, 
+                MoistureThreshold = plant.MoistureThreshold,
                 IsAutoWateringEnabled = plant.IsAutoWateringEnabled
             };
 
@@ -74,7 +78,7 @@ namespace Api.Rest.Controllers
             return Ok(response);
         }
 
-        [HttpPut("{id:guid}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, UpdatePlantDto dto)
         {
             var updated = await _plantService.UpdateAsync(id, dto);
@@ -90,6 +94,7 @@ namespace Api.Rest.Controllers
                 PlantName = updated.PlantName,
                 PlantType = updated.PlantType,
                 MoistureLevel = updated.MoistureLevel, 
+                MoistureThreshold = updated.MoistureThreshold,
                 IsAutoWateringEnabled = updated.IsAutoWateringEnabled
             };
 

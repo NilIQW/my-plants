@@ -539,14 +539,6 @@ export interface MemberLeftNotification extends BaseDto {
     topic?: string;
 }
 
-export interface ExampleClientDto extends BaseDto {
-    somethingTheClientSends?: string;
-}
-
-export interface ExampleServerResponse extends BaseDto {
-    somethingTheServerSends?: string;
-}
-
 export interface ServerSendsErrorMessage extends BaseDto {
     message?: string;
 }
@@ -563,12 +555,10 @@ export interface WaterNowServerResponse extends BaseDto {
 export enum StringConstants {
     ServerBroadcastsLiveDataToDashboard = "ServerBroadcastsLiveDataToDashboard",
     MemberLeftNotification = "MemberLeftNotification",
-    ExampleClientDto = "ExampleClientDto",
-    ExampleServerResponse = "ExampleServerResponse",
     ServerSendsErrorMessage = "ServerSendsErrorMessage",
     WaterNowClientDto = "WaterNowClientDto",
     WaterNowServerResponse = "WaterNowServerResponse",
-
+    Dashboard = "Dashboard",
 }
 
 export interface FileResponse {

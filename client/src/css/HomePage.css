@@ -63,10 +63,15 @@ button {
     border: none;
 }
 
-.watering-button {
+.watering-logs-button {
     background-color: #28a745;
     color: white;
     border: none;
+}
+
+.water-now-button {
+    background-color: aqua;
+
 }
 
 .edit-button {
