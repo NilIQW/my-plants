@@ -85,18 +85,21 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
                     MoistureThreshold = plantDto.MoistureThreshold,
                     IsAutoWateringEnabled = plantDto.IsAutoWateringEnabled
                 });
+                
+                
+             
 
                 _logger.LogInformation($"Updated plant moisture level in DB: {plantDto.MoistureLevel}");
-                await _connectionManager.BroadcastToTopic("PlantMoisture", JsonConvert.SerializeObject(plantDto));
-               
+                await _connectionManager.BroadcastToTopic(nameof(PlantDto), JsonConvert.SerializeObject(new WrapperForDto(){dto = plantDto}));
+                _logger.LogInformation($"Broadcasting to topic: {nameof(PlantDto)} with payload: {JsonConvert.SerializeObject(new WrapperForDto() { dto = plantDto })}");
+
                 // If moisture is below threshold, wait and recheck
                 if (moistureData.Moisture > plant.MoistureThreshold && plant.IsAutoWateringEnabled)
                 {
                     _logger.LogInformation($"Moisture below threshold for Plant {plant.Id}. Waiting 5 seconds to recheck...");
 
-                    await Task.Delay(5000); // Wait 5 seconds
+                    await Task.Delay(5000); 
 
-                    // Re-fetch the plant data from DB (assuming ESP32 updates the value again)
                     var recheckedPlant = await plantService.GetByIdAsync(plant.Id);
 
                     if (recheckedPlant.MoistureLevel > plant.MoistureThreshold)
@@ -105,7 +108,7 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
 
                         await wateringService.TriggerWateringAsync(plant.Id);
                         
-                        await Task.Delay(10000);  // Wait before confirming watering
+                        await Task.Delay(10000); 
 
                         _logger.LogInformation($"Watering triggered for Plant {plant.Id}.");
                     }
@@ -127,4 +130,11 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
         public string PlantId { get; set; }
         public int Moisture { get; set; }
     }
+    
+    public class WrapperForDto
+    {
+        public string eventType { get; set; } = nameof(PlantDto);
+        public PlantDto dto { get; set; }
+    }
 }
+

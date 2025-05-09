@@ -8,6 +8,6 @@ public class CreatePlantDto
     public float MoistureLevel { get; set; } 
 
     public bool IsAutoWateringEnabled { get; set; }
-
+    
     public string UserId { get; set; } = null!;
 }

@@ -21,7 +21,6 @@ export default function ApplicationRoutes() {
     
     const navigate = useNavigate();
     const [jwt] = useAtom(JwtAtom);
-    useInitializeData();
     useSubscribeToTopics();
 
     useEffect(() => {

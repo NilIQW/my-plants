@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { plantsClient } from "../apiControllerClients.ts";
-import Logout from "./LogOut.tsx";
-import { PlantResponseDto } from "../generated-client.ts";
+import {PlantResponseDto, StringConstants} from "../generated-client.ts";
 import "../css/HomePage.css";
 import {useNavigate} from "react-router-dom";
 import {CreatePlantRoute} from "../routeConstants.ts";
 import {WaterNowButton} from "./WaterManuallyButton.tsx";
+import {useWsClient} from "ws-request-hook";
 
 const HomePage: React.FC = () => {
     const [plants, setPlants] = useState<PlantResponseDto[]>([]);
@@ -13,6 +13,27 @@ const HomePage: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState<Partial<PlantResponseDto>>({});
     const navigate = useNavigate();
+    const {readyState, send, onMessage} =  useWsClient();
+    const [liveMoistureLevels, setLiveMoistureLevels] = useState<Record<string, number>>({});
+
+
+    useEffect(() => {
+        if (readyState !== 1) return;
+
+        console.log("WebSocket ready, setting up onMessage");
+
+        onMessage<WrapperForDto>(StringConstants.PlantDto, (wrapper) => {
+            const plantDto = wrapper.dto;
+            console.log("Received dto:", plantDto);
+
+            setLiveMoistureLevels(prev => ({
+                ...prev,
+                [plantDto.id]: plantDto.moistureLevel,
+            }));
+        });
+    }, [readyState]);
+
+
 
 
     useEffect(() => {
@@ -22,7 +43,6 @@ const HomePage: React.FC = () => {
     async function fetchPlants() {
         try {
             const plantsData = await plantsClient.getAll();
-            console.log(plantsData)
             setPlants(plantsData);
         } catch (error) {
             console.error("Failed to fetch plants:", error);
@@ -164,7 +184,7 @@ const HomePage: React.FC = () => {
                             <div>
                                 <p><strong>Name:</strong> {selectedPlant.plantName}</p>
                                 <p><strong>Type:</strong> {selectedPlant.plantType}</p>
-                                <p><strong>Moisture Level:</strong> {selectedPlant.moistureLevel}</p>
+                                <p><strong>Current Moisture:</strong> {liveMoistureLevels[selectedPlant.id] ?? selectedPlant.moistureLevel}</p>
                                 <p><strong>Moisture Threshold:</strong> {selectedPlant.moistureThreshold}</p>
                                 <p><strong>Auto Watering Enabled:</strong> {selectedPlant.isAutoWateringEnabled ? "Yes" : "No"}</p>
                                 <div className="button-group">
@@ -184,3 +204,17 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
+export interface WrapperForDto  {
+    eventType: string;
+    dto: PlantDto;
+}
+
+export interface PlantDto {
+    id: string;
+    plantName?: string;
+    plantType?: string;
+    moistureLevel: number;
+    moistureThreshold?: number;
+    isAutoWateringEnabled?: boolean;
+}

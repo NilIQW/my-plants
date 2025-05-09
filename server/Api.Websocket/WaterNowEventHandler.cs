@@ -18,6 +18,8 @@ public class WaterNowServerResponse : BaseDto
     public string Message { get; set; }
 }
 
+
+
 public class WaterNowEventHandler : BaseEventHandler<WaterNowClientDto>
 {
     private readonly IWateringService _wateringService;

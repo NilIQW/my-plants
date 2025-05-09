@@ -39,11 +39,11 @@ CREATE TABLE plants.user_plant (
 
 
 CREATE TABLE plants.watering_log (
-    id uuid NOT NULL,
+    id text NOT NULL,
     plant_id text NOT NULL,
     triggered_by_user_id text,
     timestamp timestamp with time zone NOT NULL,
-    method text NOT NULL,
+    method integer NOT NULL,
     moisture_before real NOT NULL,
     moisture_after real NOT NULL,
     CONSTRAINT watering_log_pkey PRIMARY KEY (id),

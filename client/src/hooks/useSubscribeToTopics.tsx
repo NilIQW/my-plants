@@ -17,11 +17,13 @@ export default function useSubscribeToTopics() {
             return;
         const subscribeDto: ChangeSubscriptionDto = {
             clientId: randomUid,
-            topicIds: [StringConstants.WaterNowClientDto, "PlantMoisture"],
+            topicIds: [StringConstants.PlantDto],
         };
         subscriptionClient.subscribe(jwt, subscribeDto).then(r => {
-            toast("You are subscribed to the dashboard topic");
+            toast("You are subscribed to live moisture levels of your plants!");
         })
+
+        console.log(subscribeDto , "dfgkdgm,ok")
 
     }, [readyState, jwt])
 }

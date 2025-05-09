@@ -39,7 +39,6 @@ const CreatePlant: React.FC = () => {
                 userId: userId,
             };
 
-            // @ts-ignore
             const response: PlantResponseDto = await plantsClient.create(plantData);
 
             console.log("Plant created successfully:", response);

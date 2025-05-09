@@ -61,7 +61,7 @@ namespace Api.Rest.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePlantDto dto)
+        public async Task<ActionResult<PlantResponseDto>> Create([FromBody] CreatePlantDto dto)
         {
             var created = await _plantService.CreateAsync(dto);
 
