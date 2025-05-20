@@ -7,7 +7,7 @@ import {
     Link,
     useNavigate
 } from "react-router-dom";
-import {RegisterRoute} from "../routeConstants.ts";
+import { RegisterRoute, SignInRoute } from "../routeConstants.ts";
 
 export default function Register() {
     const [jwt, setJwt] = useAtom(JwtAtom);
@@ -21,7 +21,7 @@ export default function Register() {
             toast.success("Registered successfully!");
             localStorage.setItem("jwt", response.jwt);
             setJwt(response.jwt);
-            navigate(RegisterRoute);
+            navigate(SignInRoute);
         } catch (error: any) {
             toast.error("Registration failed.");
             console.error(error);
@@ -29,28 +29,30 @@ export default function Register() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen space-y-4">
-            <h1 className="text-xl">Register</h1>
-            <input
-                type="email"
-                className="input input-bordered"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                className="input input-bordered"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button className="btn btn-primary" onClick={handleRegister}>
-                Register
-            </button>
-            <Link to="/signin" className="btn btn-link">
-                Already have an account? Sign in
-            </Link>
+        <div className="flex items-center justify-center h-screen">
+            <div className="w-full max-w-xs flex flex-col space-y-4">
+                <h1 className="text-xl text-center">Register</h1>
+                <input
+                    type="email"
+                    className="input input-bordered w-full"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    className="input input-bordered w-full"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button className="btn btn-primary w-full" onClick={handleRegister}>
+                    Register
+                </button>
+                <button className="btn btn-link w-full" onClick={() => navigate(SignInRoute)}>
+                    Already have an account? Sign in
+                </button>
+            </div>
         </div>
     );
 }

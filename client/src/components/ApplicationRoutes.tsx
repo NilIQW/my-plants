@@ -16,7 +16,6 @@ import Register from "./Register.tsx";
 import HomePage from "./HomePage.tsx";
 import CreatePlant from "./CreatePlant.tsx";
 import Logout from "./LogOut.tsx";
-import WateringLog from "./WateringLog.tsx";
 
 export default function ApplicationRoutes() {
     
@@ -39,7 +38,6 @@ export default function ApplicationRoutes() {
             <Route element={<Register/>} path={RegisterRoute}/>
             <Route element={<HomePage/>} path={HomePageRoute}/>
             <Route element={<CreatePlant/>} path={CreatePlantRoute}/>
-            <Route element={<WateringLog/>} path={WateringLogRoute}/>
         </Routes>
     </>)
 }

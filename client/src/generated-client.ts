@@ -432,6 +432,90 @@ export class SubscriptionClient {
     }
 }
 
+export class WateringLogClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(dto: CreateWateringLogDto): Promise<WateringLogDto> {
+        let url_ = this.baseUrl + "/api/WateringLog";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(dto);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreate(_response);
+        });
+    }
+
+    protected processCreate(response: Response): Promise<WateringLogDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as WateringLogDto;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WateringLogDto>(null as any);
+    }
+
+    getByPlantId(plantId: string): Promise<WateringLogDto[]> {
+        let url_ = this.baseUrl + "/api/WateringLog/plant/{plantId}";
+        if (plantId === undefined || plantId === null)
+            throw new Error("The parameter 'plantId' must be defined.");
+        url_ = url_.replace("{plantId}", encodeURIComponent("" + plantId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetByPlantId(_response);
+        });
+    }
+
+    protected processGetByPlantId(response: Response): Promise<WateringLogDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as WateringLogDto[];
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WateringLogDto[]>(null as any);
+    }
+}
+
 export interface AuthResponseDto {
     jwt: string;
 }
@@ -473,10 +557,6 @@ export interface ChangeSubscriptionDto {
     topicIds?: string[];
 }
 
-export interface ApplicationBaseDto {
-    eventType?: string;
-}
-
 export interface WateringLogDto {
     id?: string;
     plantId?: string;
@@ -490,16 +570,26 @@ export enum WateringMethod {
     Manual = 1,
 }
 
-
-export interface PingDto extends BaseDto {
+export interface CreateWateringLogDto {
+    triggeredByUserId?: string | undefined;
+    method?: WateringMethod;
+    plantId?: string;
 }
 
-export interface PongDto extends BaseDto {
+export interface ApplicationBaseDto {
+    eventType?: string;
 }
+
 
 export interface MemberLeftNotification extends BaseDto {
     clientId?: string;
     topic?: string;
+}
+
+export interface Ping extends BaseDto {
+}
+
+export interface Pong extends BaseDto {
 }
 
 export interface ServerSendsErrorMessage extends BaseDto {
@@ -517,9 +607,9 @@ export interface WaterNowServerResponse extends BaseDto {
 
 /** Available eventType and string constants */
 export enum StringConstants {
-    PingDto = "PingDto",
-    PongDto = "PongDto",
     MemberLeftNotification = "MemberLeftNotification",
+    Ping = "Ping",
+    Pong = "Pong",
     ServerSendsErrorMessage = "ServerSendsErrorMessage",
     WaterNowClientDto = "WaterNowClientDto",
     WaterNowServerResponse = "WaterNowServerResponse",

@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {CreatePlantRoute} from "../routeConstants.ts";
 import {WaterNowButton} from "./WaterManuallyButton.tsx";
 import {useWsClient} from "ws-request-hook";
+import {WateringLogsButton} from "./WateringLogsButton.tsx";
 
 const HomePage: React.FC = () => {
     const [plants, setPlants] = useState<PlantResponseDto[]>([]);
@@ -190,7 +191,7 @@ const HomePage: React.FC = () => {
                                 <div className="button-group">
                                     <button className="edit-button" onClick={handleEditClick}>Edit</button>
                                     <button className="delete-button" onClick={handleDeleteClick}>Delete</button>
-                                    <button className="watering-logs-button">Watering Logs</button>
+                                    <WateringLogsButton plantId={selectedPlant.id}/>
                                     <WaterNowButton plantId={selectedPlant.id}/>
                                 </div>
                             </div>

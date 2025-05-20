@@ -332,6 +332,72 @@
           }
         }
       }
+    },
+    "/api/WateringLog": {
+      "post": {
+        "tags": [
+          "WateringLog"
+        ],
+        "operationId": "WateringLog_Create",
+        "requestBody": {
+          "x-name": "dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWateringLogDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WateringLogDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/WateringLog/plant/{plantId}": {
+      "get": {
+        "tags": [
+          "WateringLog"
+        ],
+        "operationId": "WateringLog_GetByPlantId",
+        "parameters": [
+          {
+            "name": "plantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WateringLogDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -477,16 +543,6 @@
           }
         }
       },
-      "ApplicationBaseDto": {
-        "type": "object",
-        "x-abstract": true,
-        "additionalProperties": false,
-        "properties": {
-          "eventType": {
-            "type": "string"
-          }
-        }
-      },
       "WateringLogDto": {
         "type": "object",
         "additionalProperties": false,
@@ -522,39 +578,31 @@
           1
         ]
       },
-      "PingDto": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "BaseDto": {
+      "CreateWateringLogDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "eventType": {
-            "type": "string"
+          "triggeredByUserId": {
+            "type": "string",
+            "nullable": true
           },
-          "requestId": {
+          "method": {
+            "$ref": "#/components/schemas/WateringMethod"
+          },
+          "plantId": {
             "type": "string"
           }
         }
       },
-      "PongDto": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
+      "ApplicationBaseDto": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "eventType": {
+            "type": "string"
           }
-        ]
+        }
       },
       "MemberLeftNotification": {
         "allOf": [
@@ -572,6 +620,40 @@
                 "type": "string"
               }
             }
+          }
+        ]
+      },
+      "BaseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "eventType": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          }
+        }
+      },
+      "Ping": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Pong": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
           }
         ]
       },
@@ -630,9 +712,9 @@
         "type": "string",
         "description": "Available eventType and string constants",
         "enum": [
-          "PingDto",
-          "PongDto",
           "MemberLeftNotification",
+          "Ping",
+          "Pong",
           "ServerSendsErrorMessage",
           "WaterNowClientDto",
           "WaterNowServerResponse",
