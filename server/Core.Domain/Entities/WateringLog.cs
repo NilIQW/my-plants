@@ -17,6 +17,5 @@ public class WateringLog
 
     public WateringMethod Method { get; set; }
 
-    public float MoistureBefore { get; set; }
-    public float MoistureAfter { get; set; }
+    
 }

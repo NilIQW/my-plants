@@ -1,5 +1,8 @@
 using Application.Interfaces;
 using Application.Interfaces.Infrastructure.MQTT;
+using Application.Interfaces.Infrastructure.Postgres;
+using Application.Models.Dtos.RestDtos.WateringLogDtos;
+using Application.Models.Enums;
 using Core.Domain.Entities;
 using Microsoft.Extensions.Logging;
 using WebSocketBoilerplate;
@@ -11,6 +14,7 @@ namespace Api.Websocket;
 public class WaterNowClientDto : BaseDto
 {
     public string PlantId { get; set; }
+    public string UserId { get; set; }
 }
 
 public class WaterNowServerResponse : BaseDto
@@ -24,10 +28,14 @@ public class WaterNowEventHandler : BaseEventHandler<WaterNowClientDto>
 {
     private readonly IWateringService _wateringService;
     private readonly ILogger<WaterNowEventHandler> _logger;
+    private readonly IWateringLogService _wateringLogService;
 
-    public WaterNowEventHandler(IWateringService wateringService, ILogger<WaterNowEventHandler> logger)
+    public WaterNowEventHandler(IWateringService wateringService,
+        IWateringLogService wateringLogService,
+        ILogger<WaterNowEventHandler> logger)
     {
         _wateringService = wateringService;
+        _wateringLogService = wateringLogService;
         _logger = logger;
     }
 
@@ -38,6 +46,12 @@ public class WaterNowEventHandler : BaseEventHandler<WaterNowClientDto>
             _logger.LogInformation("Received WaterNow request for plant {PlantId}", dto.PlantId);
 
             await _wateringService.TriggerWateringAsync(dto.PlantId);
+            await _wateringLogService.CreateAsync(new CreateWateringLogDto
+            {
+                PlantId = dto.PlantId,
+                TriggeredByUserId = dto.UserId, 
+                Method = WateringMethod.Manual
+            });
 
             socket.SendDto(new WaterNowServerResponse
             {

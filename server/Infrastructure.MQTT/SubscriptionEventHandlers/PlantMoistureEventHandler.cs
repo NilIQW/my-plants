@@ -2,7 +2,10 @@ using Application.Interfaces;
 using Application.Interfaces.Infrastructure.MQTT;
 using Application.Interfaces.Infrastructure.Websocket;
 using Application.Interfaces.Infrastructure.Postgres;
+using Application.Models.Dtos.MqttSubscriptionDto;
 using Application.Models.Dtos.RestDtos.PlantDtos;
+using Application.Models.Dtos.RestDtos.WateringLogDtos;
+using Application.Models.Enums;
 using Application.Services;
 using HiveMQtt.Client.Events;
 using HiveMQtt.MQTT5.Types;
@@ -19,19 +22,16 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
 
         private readonly ILogger<PlantMoistureMessageHandler> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly IWebsocketSubscriptionService _websocketSubscriptionService;
         private readonly IConnectionManager _connectionManager;
 
         public PlantMoistureMessageHandler(
             IConnectionManager connectionManager,
             ILogger<PlantMoistureMessageHandler> logger,
-            IServiceScopeFactory serviceScopeFactory,
-            IWebsocketSubscriptionService websocketSubscriptionService)
+            IServiceScopeFactory serviceScopeFactory)
         {
             _connectionManager = connectionManager;
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
-            _websocketSubscriptionService = websocketSubscriptionService;
         }
 
         public void Handle(object? sender, OnMessageReceivedEventArgs args)
@@ -57,6 +57,7 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
                 using var scope = _serviceScopeFactory.CreateScope();
                 var plantService = scope.ServiceProvider.GetRequiredService<IPlantService>();
                 var wateringService = scope.ServiceProvider.GetRequiredService<IWateringService>();
+                var wateringLogService = scope.ServiceProvider.GetRequiredService<IWateringLogService>();
 
                 var plant = await plantService.GetByIdAsync(moistureData.PlantId);
 
@@ -66,7 +67,6 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
                     return;
                 }
 
-                // Update the moisture value regardless
                 var plantDto = new PlantDto
                 {
                     Id = plant.Id,
@@ -85,37 +85,22 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
                     MoistureThreshold = plantDto.MoistureThreshold,
                     IsAutoWateringEnabled = plantDto.IsAutoWateringEnabled
                 });
-                
-                
-             
 
                 _logger.LogInformation($"Updated plant moisture level in DB: {plantDto.MoistureLevel}");
-                await _connectionManager.BroadcastToTopic(nameof(PlantDto), JsonConvert.SerializeObject(new WrapperForDto(){dto = plantDto}));
+                await _connectionManager.BroadcastToTopic(nameof(PlantDto), JsonConvert.SerializeObject(new WrapperForDto() { dto = plantDto }));
                 _logger.LogInformation($"Broadcasting to topic: {nameof(PlantDto)} with payload: {JsonConvert.SerializeObject(new WrapperForDto() { dto = plantDto })}");
 
-                // If moisture is below threshold, wait and recheck
+                // Trigger watering if below threshold and auto-watering is enabled
                 if (moistureData.Moisture > plant.MoistureThreshold && plant.IsAutoWateringEnabled)
                 {
-                    _logger.LogInformation($"Moisture below threshold for Plant {plant.Id}. Waiting 5 seconds to recheck...");
-
-                    await Task.Delay(5000); 
-
-                    var recheckedPlant = await plantService.GetByIdAsync(plant.Id);
-
-                    if (recheckedPlant.MoistureLevel > plant.MoistureThreshold)
+                    _logger.LogInformation($"Moisture below threshold. Triggering watering for Plant {plant.Id}.");
+                    await wateringService.TriggerWateringAsync(plant.Id);
+                    await wateringLogService.CreateAsync(new CreateWateringLogDto
                     {
-                        _logger.LogInformation($"Moisture still low after recheck. Triggering watering for Plant {plant.Id}.");
-
-                        await wateringService.TriggerWateringAsync(plant.Id);
-                        
-                        await Task.Delay(10000); 
-
-                        _logger.LogInformation($"Watering triggered for Plant {plant.Id}.");
-                    }
-                    else
-                    {
-                        _logger.LogInformation($"Moisture rechecked and is now sufficient. No watering needed.");
-                    }
+                        TriggeredByUserId = null,
+                        Method = WateringMethod.Auto,
+                        PlantId = plant.Id
+                    });
                 }
             }
             catch (Exception ex)
@@ -125,16 +110,11 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
         }
     }
 
-    public class PlantMoistureData
-    {
-        public string PlantId { get; set; }
-        public int Moisture { get; set; }
-    }
     
+
     public class WrapperForDto
     {
         public string eventType { get; set; } = nameof(PlantDto);
         public PlantDto dto { get; set; }
     }
 }
-

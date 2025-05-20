@@ -7,6 +7,8 @@ import {
     StringConstants,
 } from "../generated-client.ts";
 import toast from "react-hot-toast";
+import { getUserIdFromJwt } from "../utils/jwt.ts";
+
 
 interface WaterNowButtonProps {
     plantId: string;
@@ -37,16 +39,24 @@ export const WaterNowButton: React.FC<WaterNowButtonProps> = ({ plantId }) => {
             return;
         }
 
+        const userId = getUserIdFromJwt();
+        if (!userId) {
+            toast.error("User not authenticated.");
+            return;
+        }
+
         const dto: WaterNowClientDto = {
             eventType: StringConstants.WaterNowClientDto,
             requestId: crypto.randomUUID(),
             plantId,
+            userId, // ✅ TypeScript is now happy
         };
 
         console.log("Sending WaterNowClientDto:", dto);
         toast("Watering the plant now...");
         send(dto);
     };
+
 
     return (
         <button

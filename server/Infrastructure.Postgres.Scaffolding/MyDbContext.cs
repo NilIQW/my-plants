@@ -76,9 +76,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.TriggeredByUserId).HasColumnName("triggered_by_user_id");
             entity.Property(e => e.Timestamp).HasColumnName("timestamp");
             entity.Property(e => e.Method).HasColumnName("method");
-            entity.Property(e => e.MoistureBefore).HasColumnName("moisture_before");
-            entity.Property(e => e.MoistureAfter).HasColumnName("moisture_after");
-
+            
             entity.HasOne(e => e.Plant)
                 .WithMany(p => p.WateringLogs)
                 .HasForeignKey(e => e.PlantId);

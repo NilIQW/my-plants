@@ -45,7 +45,7 @@ public class Program
         else
         {
             Console.WriteLine("Skipping MQTT service registration: Making sure there is an available mock publisher");
-            services.AddSingleton<IMqttPublisher, MockMqttPublisher>();
+            //services.AddSingleton<IMqttPublisher, MockMqttPublisher>();
         }
 
         services.AddOpenApiDocument(conf =>

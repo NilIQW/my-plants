@@ -332,39 +332,6 @@
           }
         }
       }
-    },
-    "/ExampleBroadcast": {
-      "post": {
-        "tags": [
-          "Subscription"
-        ],
-        "operationId": "Subscription_ExampleBroadcast",
-        "requestBody": {
-          "x-name": "dto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExampleBroadcastDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -510,18 +477,6 @@
           }
         }
       },
-      "ExampleBroadcastDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "eventType": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
       "ApplicationBaseDto": {
         "type": "object",
         "x-abstract": true,
@@ -532,19 +487,72 @@
           }
         }
       },
-      "ServerBroadcastsLiveDataToDashboard": {
+      "WateringLogDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "plantId": {
+            "type": "string"
+          },
+          "triggeredByUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "method": {
+            "$ref": "#/components/schemas/WateringMethod"
+          }
+        }
+      },
+      "WateringMethod": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Auto",
+          "Manual"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "PingDto": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/ApplicationBaseDto"
+            "$ref": "#/components/schemas/BaseDto"
           },
           {
             "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "eventType": {
-                "type": "string"
-              }
-            }
+            "additionalProperties": false
+          }
+        ]
+      },
+      "BaseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "eventType": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          }
+        }
+      },
+      "PongDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
           }
         ]
       },
@@ -562,38 +570,6 @@
               },
               "topic": {
                 "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "BaseDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "eventType": {
-            "type": "string"
-          },
-          "requestId": {
-            "type": "string"
-          }
-        }
-      },
-      "PlantMoistureDto": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseDto"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "plantId": {
-                "type": "string"
-              },
-              "moistureLevel": {
-                "type": "integer",
-                "format": "int32"
               }
             }
           }
@@ -626,6 +602,9 @@
             "properties": {
               "plantId": {
                 "type": "string"
+              },
+              "userId": {
+                "type": "string"
               }
             }
           }
@@ -651,9 +630,9 @@
         "type": "string",
         "description": "Available eventType and string constants",
         "enum": [
-          "ServerBroadcastsLiveDataToDashboard",
+          "PingDto",
+          "PongDto",
           "MemberLeftNotification",
-          "PlantMoistureDto",
           "ServerSendsErrorMessage",
           "WaterNowClientDto",
           "WaterNowServerResponse",

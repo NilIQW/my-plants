@@ -21,6 +21,7 @@ public static class Extensions
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPlantRepository, PlantRepository>();
+        services.AddScoped<IWateringLogRepository, WateringLogRepository>();
         services.AddScoped<Seeder>();
 
         return services;

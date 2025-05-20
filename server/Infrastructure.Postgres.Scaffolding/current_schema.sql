@@ -44,8 +44,6 @@ CREATE TABLE plants.watering_log (
     triggered_by_user_id text,
     timestamp timestamp with time zone NOT NULL,
     method integer NOT NULL,
-    moisture_before real NOT NULL,
-    moisture_after real NOT NULL,
     CONSTRAINT watering_log_pkey PRIMARY KEY (id),
     CONSTRAINT "FK_watering_log_plant_plant_id" FOREIGN KEY (plant_id) REFERENCES plants.plant (id) ON DELETE CASCADE,
     CONSTRAINT "FK_watering_log_user_triggered_by_user_id" FOREIGN KEY (triggered_by_user_id) REFERENCES plants."user" (id) ON DELETE SET NULL

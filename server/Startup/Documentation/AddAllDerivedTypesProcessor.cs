@@ -1,4 +1,5 @@
 using Application.Models.Dtos;
+using Application.Models.Dtos.RestDtos.WateringLogDtos;
 using Namotion.Reflection;
 using NSwag.Generation.Processors;
 using NSwag.Generation.Processors.Contexts;
@@ -32,6 +33,7 @@ public sealed class AddAllDerivedTypesProcessor : IDocumentProcessor
                  !t.IsAbstract &&
                  typeof(BaseDto).IsAssignableFrom(t)) ||
                 typeof(ApplicationBaseDto).IsAssignableFrom(t)
+                || t == typeof(WateringLogDto)
             )
             .ToList();
 
