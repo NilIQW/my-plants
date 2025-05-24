@@ -1,4 +1,3 @@
-using Application.Interfaces;
 using Application.Interfaces.Infrastructure.MQTT;
 using Application.Interfaces.Infrastructure.Websocket;
 using Application.Interfaces.Infrastructure.Postgres;
@@ -6,11 +5,8 @@ using Application.Models.Dtos.MqttSubscriptionDto;
 using Application.Models.Dtos.RestDtos.PlantDtos;
 using Application.Models.Dtos.RestDtos.WateringLogDtos;
 using Application.Models.Enums;
-using Application.Services;
 using HiveMQtt.Client.Events;
 using HiveMQtt.MQTT5.Types;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Infrastructure.MQTT.SubscriptionEventHandlers
@@ -23,6 +19,8 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
         private readonly ILogger<PlantMoistureMessageHandler> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IConnectionManager _connectionManager;
+        
+
 
         public PlantMoistureMessageHandler(
             IConnectionManager connectionManager,
@@ -66,6 +64,8 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
                     _logger.LogWarning($"Plant with ID {moistureData.PlantId} not found in the database.");
                     return;
                 }
+                
+
 
                 var plantDto = new PlantDto
                 {
@@ -81,7 +81,7 @@ namespace Infrastructure.MQTT.SubscriptionEventHandlers
                 {
                     PlantName = plantDto.PlantName,
                     PlantType = plantDto.PlantType,
-                    MoistureLevel = plantDto.MoistureLevel,
+                    MoistureLevel = moistureData.Moisture,
                     MoistureThreshold = plantDto.MoistureThreshold,
                     IsAutoWateringEnabled = plantDto.IsAutoWateringEnabled
                 });

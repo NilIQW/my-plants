@@ -7,6 +7,7 @@ import {CreatePlantRoute} from "../routeConstants.ts";
 import {WaterNowButton} from "./WaterManuallyButton.tsx";
 import {useWsClient} from "ws-request-hook";
 import {WateringLogsButton} from "./WateringLogsButton.tsx";
+import {convertPercentToRaw, convertRawToPercent} from "../utils/moistureConversion.ts";
 
 const HomePage: React.FC = () => {
     const [plants, setPlants] = useState<PlantResponseDto[]>([]);
@@ -165,10 +166,21 @@ const HomePage: React.FC = () => {
                                     <input
                                         type="number"
                                         name="moistureThreshold"
-                                        value={editData.moistureThreshold || 0}
-                                        onChange={handleInputChange}
+                                        value={
+                                            editData.moistureThreshold !== undefined
+                                                ? convertRawToPercent(editData.moistureThreshold)
+                                                : ""
+                                        }
+                                        onChange={(e) => {
+                                            const percent = Number(e.target.value);
+                                            setEditData((prev) => ({
+                                                ...prev,
+                                                moistureThreshold: convertPercentToRaw(percent),
+                                            }));
+                                        }}
                                         className="input"
                                     />
+
                                 </div>
                                 <div>
                                     <label>Auto Watering Enabled: </label>
@@ -185,8 +197,11 @@ const HomePage: React.FC = () => {
                             <div>
                                 <p><strong>Name:</strong> {selectedPlant.plantName}</p>
                                 <p><strong>Type:</strong> {selectedPlant.plantType}</p>
-                                <p><strong>Current Moisture:</strong> {liveMoistureLevels[selectedPlant.id] ?? selectedPlant.moistureLevel}</p>
-                                <p><strong>Moisture Threshold:</strong> {selectedPlant.moistureThreshold}</p>
+                                <p><strong>Current Moisture:</strong> {
+                                    convertRawToPercent(liveMoistureLevels[selectedPlant.id] ?? selectedPlant.moistureLevel)
+                                }%</p>
+                                <p><strong>Moisture
+                                    Threshold:</strong> {convertRawToPercent(selectedPlant.moistureThreshold ?? 0)}%</p>
                                 <p><strong>Auto Watering Enabled:</strong> {selectedPlant.isAutoWateringEnabled ? "Yes" : "No"}</p>
                                 <div className="button-group">
                                     <button className="edit-button" onClick={handleEditClick}>Edit</button>
