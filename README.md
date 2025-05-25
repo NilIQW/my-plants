@@ -1,7 +1,7 @@
 # Smart Plant Watering System
 
 ## 1. Project Title  
-Smart Plant Watering System with ESP32, MQTT, C# Backend, and React Frontend
+Smart Plant Watering System
 
 ## 2. Project Description  
 This project is an IoT-based smart plant watering system. It uses an ESP32 microcontroller to measure soil moisture and control a water pump. The ESP32 communicates with a C# backend over an MQTT broker (HiveMQ). The backend uses both REST APIs and WebSockets to communicate with the React frontend and stores plant data, including moisture levels, moisture thresholds, plant name, type, and watering logs in a PostgreSQL database. 
